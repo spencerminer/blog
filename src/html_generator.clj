@@ -6,6 +6,9 @@
   [:head
    [:meta {:charset "utf-8"}]
    [:title "Blog 0.1.0"]
+   [:link {:rel "shortcut icon"
+           :type "image/png"
+           :href "resources/favicon-32x32.png"}]
    [:meta {:name "description"
            :content "Just an experiment"}]
    [:meta {:name "author"
