@@ -90,7 +90,7 @@
                      (:publish-date post)))))
 
 (defn generate-index-html! []
-  (map generate-post-html! blogpost-maps-vector)
+  (doall (map generate-post-html! blogpost-maps-vector))
   (->> blogpost-maps-vector
        make-html-body
        (hp/html5 {:lang "en"} html-header)
