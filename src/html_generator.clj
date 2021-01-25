@@ -1,6 +1,5 @@
 (ns html-generator
-  (:require [hiccup.core :as h]
-            [hiccup.element :as he]
+  (:require [hiccup.element :as he]
             [hiccup.page :as hp]))
 
 (def bootstrap-css
@@ -25,7 +24,7 @@
    bootstrap-css
 
    ;; favicons
-   [:link {:rel "apple-touch-icon" :href "resources/apple-touch-icon" :sizes "180x180"}]
+   [:link {:rel "apple-touch-icon" :href "resources/apple-touch-icon.png" :sizes "180x180"}]
    [:link {:rel "icon" :href "resources/favicon-32x32.png" :sizes "32x32" :type "image/png"}]
    [:link {:rel "icon" :href "resources/favicon-16x16.png" :sizes "16x16" :type "image/png"}]
    [:link {:rel "manifest" :href "resources/site.webmanifest.json"}]
@@ -35,15 +34,33 @@
   [:body
    [:div.container
     [:div.row
-     [:h1 "Here we go..."]
-     [:h3 "with Hiccup!"]]
+     [:h1 "Here we go..."]]
     [:br]
     [:div.row
      [:div.col-9
       [:div.row
+       [:h3 "Post #2"]
+       [:h5 "2021-01-24"]
+       [:p "Maybe I'll make this into a design diary (à la Stonemaier Games "
+        "design diaries) for now."]
+       [:p "Right now I'm just typing strings into vectors that "
+        [:a {:href "https://github.com/weavejester/hiccup"} "Hiccup"]
+        ", a Clojure library, will turn into HTML code, which I'll push to "
+        "Github. I hope to be able to write notes in Markdown that my program "
+        "will convert into Clojure data structures with lots of metadata that "
+        "will be put into Hiccup to make HTML. That's the dream. Probably "
+        "not too hard if I'm able to devote some time to figuring it out."]
+       [:p "I also want to make the layout and styling look decent. I am "
+        "starting using Bootstrap, but it's very rudimentary right now "
+        "(something that future people reading this hopefully won't be able to "
+        "see). I have a lot of learning and experimenting to do. Including "
+        "figuring out how to balance time between writing the blog and making "
+        "the blog"]]
+      [:div.row
        [:h3 "Post #1"]
-       [:p "I pledge that these blog posts will either:"
-        (he/unordered-list ["be short or" "have lots of pictures/diagrams"])]]]
+       [:h5 "2021-01-22"]
+       [:p "I pledge that these blog posts will either:"]
+       (he/unordered-list ["be short, or" "have lots of pictures/diagrams"])]]
      [:div.col-3
       [:h5 "The index/table of contents will go here eventually"]]]
     [:br]
