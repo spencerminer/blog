@@ -1,5 +1,6 @@
 (ns html-generator
-  (:require [hiccup.element :as he]
+  (:require [clojure.edn :as edn]
+            [hiccup.element :as he]
             [hiccup.page :as hp]))
 
 (def bootstrap-css
@@ -24,11 +25,86 @@
    bootstrap-css
 
    ;; favicons
-   [:link {:rel "apple-touch-icon" :href "resources/apple-touch-icon.png" :sizes "180x180"}]
-   [:link {:rel "icon" :href "resources/favicon-32x32.png" :sizes "32x32" :type "image/png"}]
-   [:link {:rel "icon" :href "resources/favicon-16x16.png" :sizes "16x16" :type "image/png"}]
-   [:link {:rel "manifest" :href "resources/site.webmanifest.json"}]
-   [:link {:rel "icon" :href "resources/favicon.ico"}]])
+   [:link {:rel "apple-touch-icon" :href "resources/favicons/apple-touch-icon.png" :sizes "180x180"}]
+   [:link {:rel "icon" :href "resources/favicons/favicon-32x32.png" :sizes "32x32" :type "image/png"}]
+   [:link {:rel "icon" :href "resources/favicons/favicon-16x16.png" :sizes "16x16" :type "image/png"}]
+   [:link {:rel "manifest" :href "resources/favicons/site.webmanifest.json"}]
+   [:link {:rel "icon" :href "resources/favicons/favicon.ico"}]])
+
+(defn post->hiccup [post-filename]
+  (let [post-map (->> post-filename
+                      (format "resources/posts/%s.edn")
+                      slurp
+                      edn/read-string)]
+    (apply conj
+           [:div.row
+            [:h3 (:title post-map)]
+            [:h5 (:publish-date post-map)]]
+           (:hiccup-body post-map))))
+
+(defn parse-md-section [lines]
+  (let [[md-key & content]
+        (clojure.string/split (first lines) #" ")]
+    (case (first md-key)
+      \# [(keyword (str "h" (count md-key)))
+          (clojure.string/join " " content)]
+      \+ (he/unordered-list
+          (map #(->> % (drop 2) (apply str))
+               lines))
+      \* (he/unordered-list
+          (map #(->> % (drop 2) (apply str))
+               lines))
+      \1 (he/ordered-list
+          (map #(->> % (drop 3) (apply str))
+               lines))
+      (apply conj [:p] lines))))
+
+;;(defn md-file->hiccup-row [filename]
+;;  (->> filename
+;;       slurp
+;;       clojure.string/split-lines
+;;       (partition-by empty?)
+;;       (remove #(empty? (first %)))
+;;       (map parse-md-section)
+;;       (apply conj [:div.row])))
+
+(defn is-#-char [c] (= \# c))
+
+(defn parse-my-md-header [header-strings]
+  (zipmap [:title :publish-date :tags :author]
+          (map #(->> %
+                     (drop-while is-#-char)
+                     (apply str)
+                     clojure.string/trim)
+               header-strings)))
+
+(defn md-file->post-map [filename]
+  (let [[hdr & body]
+        (->> filename
+             slurp
+             clojure.string/split-lines
+             (partition-by empty?)
+             (remove #(empty? (first %))))]
+    (merge
+     (parse-my-md-header hdr)
+     {:body (->> body
+                 (map parse-md-section)
+                 (apply conj [:div.row]))})))
+
+(comment
+ (->> "resources/markdown-posts"                            ;; Get filenames
+      clojure.java.io/file                                  ;; ||
+      file-seq                                              ;; ||
+      (filter #(.isFile %))                                 ;; ||
+      (map str)                                             ;; \/
+
+      (mapv md-file->post-map)
+      ;; call this first, then use this w/ options to gen html
+      ;; with something similr to post->hiccup
+      ;; then put em all together:
+      #_(apply conj [:div.posts])
+      )
+ )
 
 (def html-body
   [:body
@@ -38,29 +114,10 @@
     [:br]
     [:div.row
      [:div.col-9
-      [:div.row
-       [:h3 "Post #2"]
-       [:h5 "2021-01-24"]
-       [:p "Maybe I'll make this into a design diary (à la Stonemaier Games "
-        "design diaries) for now."]
-       [:p "Right now I'm just typing strings into vectors that "
-        [:a {:href "https://github.com/weavejester/hiccup"} "Hiccup"]
-        ", a Clojure library, will turn into HTML code, which I'll push to "
-        "Github. I hope to be able to write notes in Markdown that my program "
-        "will convert into Clojure data structures with lots of metadata that "
-        "will be put into Hiccup to make HTML. That's the dream. Probably "
-        "not too hard if I'm able to devote some time to figuring it out."]
-       [:p "I also want to make the layout and styling look decent. I am "
-        "starting using Bootstrap, but it's very rudimentary right now "
-        "(something that future people reading this hopefully won't be able to "
-        "see). I have a lot of learning and experimenting to do. Including "
-        "figuring out how to balance time between writing the blog and making "
-        "the blog"]]
-      [:div.row
-       [:h3 "Post #1"]
-       [:h5 "2021-01-22"]
-       [:p "I pledge that these blog posts will either:"]
-       (he/unordered-list ["be short, or" "have lots of pictures/diagrams"])]]
+      (post->hiccup "post-2")
+      (post->hiccup "post-1")
+      ;;(md-file->hiccup-row "resources/markdown-posts/test-post.md")
+      ]
      [:div.col-3
       [:h5 "The index/table of contents will go here eventually"]]]
     [:br]
@@ -77,7 +134,3 @@
         (hp/html5 {:lang "en"}
                   html-header
                   html-body)))
-
-(comment
- (generate-index-html
-  ))

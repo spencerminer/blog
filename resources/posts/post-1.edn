@@ -1,0 +1,9 @@
+{:title "Post #1"
+ :publish-date "2021-01-22"
+ :tags #{"meta"}
+ :hiccup-body
+ [[:p "I pledge that these blog posts will either:"]
+  [:ul
+   ([:li "be short, or"]
+    [:li "have lots of pictures/diagrams"]
+    [:li "OR be xtra cool"])]]}
