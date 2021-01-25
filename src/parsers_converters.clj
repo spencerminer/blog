@@ -46,3 +46,8 @@
      {:hiccup-body (->> body
                         (map parse-md-section)
                         (apply conj [:div.post-body]))})))
+
+(defn make-toc-hiccup [posts]
+  [:div.post-titles
+   (he/unordered-list
+    (map :title posts))])

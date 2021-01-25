@@ -1,6 +1,7 @@
 (ns html-generator
   (:require [hiccup.page :as hp]
-            [parsers-converters :as pc]))
+            [parsers-converters :as pc])
+  (:import (java.io File)))
 
 (def bootstrap-css
   [:link {:href "https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css"
@@ -40,7 +41,7 @@
        (filter #(.isFile %))
        (map str)))
 
-(def create-blogpost-maps-vector
+(def blogpost-maps-vector
   (->> posts-directory
        get-blogpost-filenames
        (mapv pc/md-file->blogpost-map)))
@@ -54,7 +55,8 @@
 
 (defn make-toc [posts]
   [:div.toc
-   [:h5 "The table of contents will go here eventually"]])
+   [:h4 "Table of Contents"]
+   (pc/make-toc-hiccup posts)])
 
 (def page-footer
   [:div.footer
@@ -76,8 +78,20 @@
     [:div.row page-footer]]
    bootstrap-bundle])
 
-(defn generate-index-html []
-  (->> create-blogpost-maps-vector
+(defn make-folder! [path]
+  (.mkdir (File. path)))
+
+(defn generate-post-html! [post]
+  (make-folder! (str "posts/" (:publish-date post)))
+  (->> post
+       pc/blogpost->hiccup
+       (hp/html5 {:lang "en"} html-header)
+       (spit (format "posts/%s/post.html"
+                     (:publish-date post)))))
+
+(defn generate-index-html! []
+  (map generate-post-html! blogpost-maps-vector)
+  (->> blogpost-maps-vector
        make-html-body
        (hp/html5 {:lang "en"} html-header)
        (spit "index.html")))

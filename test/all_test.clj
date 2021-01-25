@@ -3,4 +3,4 @@
             [html-generator :as hg]))
 
 (deftest generate-index-html-test
-  (hg/generate-index-html))
+  (hg/generate-index-html!))
