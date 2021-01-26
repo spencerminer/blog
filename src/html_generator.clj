@@ -82,9 +82,7 @@
   (.mkdir (File. path)))
 
 (defn generate-post-html! [post]
-  (prn "About to make folder")
   (make-folder! (str "posts/" (:publish-date post)))
-  (prn "shoulda made folder by now")
   (->> post
        pc/blogpost->hiccup
        (hp/html5 {:lang "en"} html-header)
