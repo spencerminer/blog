@@ -1,5 +1,6 @@
 (ns parsers-converters
-  (:require [hiccup.element :as he]))
+  (:require [hiccup.element :as he])
+  (:import (java.net URLEncoder)))
 
 (defn blogpost->hiccup [blogpost-map]
   [:div.row
@@ -47,7 +48,16 @@
                         (map parse-md-section)
                         (apply conj [:div.post-body]))})))
 
+(defn make-post-url [post]
+  (format "posts/%s/%s.html"
+          (:publish-date post)
+          (URLEncoder/encode ^String (:title post) "UTF-8")))
+
+(defn make-link-to-post [post]
+  [:a {:href (str "/" (make-post-url post))}
+   (:title post)])
+
 (defn make-toc-hiccup [posts]
   [:div.post-titles
    (he/unordered-list
-    (map :title posts))])
+    (map make-link-to-post posts))])

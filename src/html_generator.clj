@@ -30,6 +30,7 @@
    [:meta {:name "author" :content "Spencer"}]
    [:meta {:name "viewport" :content "width=device-width, initial-scale=1"}]
    bootstrap-css
+   (first (hp/include-css "css/my-css.css"))
    favicons])
 
 (def posts-directory "resources/markdown-posts")
@@ -79,15 +80,14 @@
    bootstrap-bundle])
 
 (defn make-folder! [path]
-  (.mkdir (File. path)))
+  (.mkdir (File. ^String path)))
 
 (defn generate-post-html! [post]
   (make-folder! (str "posts/" (:publish-date post)))
   (->> post
        pc/blogpost->hiccup
        (hp/html5 {:lang "en"} html-header)
-       (spit (format "posts/%s/post.html"
-                     (:publish-date post)))))
+       (spit (pc/make-post-url post))))
 
 (defn generate-index-html! []
   (doall (map generate-post-html! blogpost-maps-vector))
