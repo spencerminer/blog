@@ -59,7 +59,7 @@
               (string/replace #"[^\w|-]" ""))))
 
 (defn make-link-to-post [post]
-  [:a {:href (str "/blog/" (make-post-url post))}
+  [:a {:href (str "/" (make-post-url post))}
    (:title post)])
 
 (defn make-toc-hiccup [posts]
