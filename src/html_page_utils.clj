@@ -47,7 +47,7 @@
 (defn make-html-body [all-posts main-content]
   [:body
    [:div.container
-    [:div.row [:h1 "Here we go..."]]
+    [:div.row [:h1 [:a {:href (str r/path-prefix "/")} "Here we go..."]]]
     [:br]
     [:div.row
      [:div.col-9 main-content]
