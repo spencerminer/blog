@@ -52,6 +52,3 @@
        (h/make-html-body blogpost-maps)
        h/make-html-page
        (spit "index.html")))
-
-(clojure.test/deftest generate-index-html-test
-  (generate-website-html!))
