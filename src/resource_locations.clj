@@ -2,12 +2,11 @@
 
 (def local-test? (System/getenv "BLOG_LOCAL_ENV"))
 
-(def path-prefix
-  (when local-test? "/blog"))
+(def path-prefix (when local-test? "/blog"))
 
-(def css-location
-  (str path-prefix "/css/my-css.css"))
+(def css-location (str path-prefix "/css/my-css.css"))
 
+;; Favicons
 (def apple-touch-icon-location
   (str path-prefix "/resources/favicons/apple-touch-icon.png"))
 (def icon-32-location

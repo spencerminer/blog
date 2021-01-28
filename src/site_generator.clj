@@ -38,8 +38,15 @@
 (defn generate-all-post-pages! [blogposts]
   (doall (map generate-post-pages! blogposts)))
 
+(defn generate-toc-page! [blogposts]
+  (->> blogposts
+       h/make-toc
+       h/make-html-page
+       (spit "posts/index.html")))
+
 (defn generate-website-html! []
   (generate-all-post-pages! blogpost-maps)
+  (generate-toc-page! blogpost-maps)
   (->> blogpost-maps
        make-all-posts-hiccup
        (h/make-html-body blogpost-maps)

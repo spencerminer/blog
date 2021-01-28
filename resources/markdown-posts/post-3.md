@@ -17,7 +17,7 @@ vector of blog post hashmaps into Hiccup code and puts the posts in the main
 section of the webpage.
 
 I decided to read all the Markdown posts into a vector of blog post 
-hashmaps so that I could use it for multiple things on the website. For one, it
+hashmaps so that I could use it for multiple things on the website. For one, it 
 is used to populate the Table of Contents. It is also used to create unique 
 pages for each post, which I'll soon be linking to in the Table of Contents.
 

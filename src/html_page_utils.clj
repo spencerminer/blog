@@ -48,7 +48,6 @@
   [:body
    [:div.container
     [:div.row [:h1 [:a {:href (str r/path-prefix "/")} "Here we go..."]]]
-    [:br]
     [:div.row
      [:div.col-9 main-content]
      [:div.col-3 (make-toc all-posts)]]
