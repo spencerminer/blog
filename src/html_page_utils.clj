@@ -1,6 +1,7 @@
 (ns html-page-utils
   (:require [hiccup.page :as hp]
-            [parsers-converters :as pc]))
+            [parsers-converters :as pc]
+            [resource-locations :as r]))
 
 (def bootstrap-css
   [:link {:href "https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css"
@@ -15,11 +16,11 @@
 
 (def favicons
   (list
-   [:link {:rel "apple-touch-icon" :href "resources/favicons/apple-touch-icon.png" :sizes "180x180"}]
-   [:link {:rel "icon" :href "resources/favicons/favicon-32x32.png" :sizes "32x32" :type "image/png"}]
-   [:link {:rel "icon" :href "resources/favicons/favicon-16x16.png" :sizes "16x16" :type "image/png"}]
-   [:link {:rel "manifest" :href "resources/favicons/site.webmanifest.json"}]
-   [:link {:rel "icon" :href "resources/favicons/favicon.ico"}]))
+   [:link {:rel "apple-touch-icon" :href r/apple-touch-icon-location  :sizes "180x180"}]
+   [:link {:rel "icon" :href r/icon-32-location  :sizes "32x32" :type "image/png"}]
+   [:link {:rel "icon" :href r/icon-16-location  :sizes "16x16" :type "image/png"}]
+   [:link {:rel "manifest" :href r/manifest-location }]
+   [:link {:rel "icon" :href r/icon-ico-location }]))
 
 (def html-header
   [:head
@@ -29,7 +30,7 @@
    [:meta {:name "author" :content "Spencer"}]
    [:meta {:name "viewport" :content "width=device-width, initial-scale=1"}]
    bootstrap-css
-   (hp/include-css "/css/my-css.css")
+   (hp/include-css r/css-location)
    favicons])
 
 (def page-footer

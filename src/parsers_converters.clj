@@ -1,6 +1,7 @@
 (ns parsers-converters
-  (:require [hiccup.element :as he]
-            [clojure.string :as string]))
+  (:require [clojure.string :as string]
+            [hiccup.element :as he]
+            [resource-locations :as r]))
 
 (defn blogpost->hiccup [blogpost-map]
   [:div.row
@@ -59,7 +60,7 @@
               (string/replace #"[^\w|-]" ""))))
 
 (defn make-link-to-post [post]
-  [:a {:href (str "/" (make-post-url post))}
+  [:a {:href (str r/path-prefix "/" (make-post-url post))}
    (:title post)])
 
 (defn make-toc-hiccup [posts]
