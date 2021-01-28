@@ -29,7 +29,7 @@
    [:meta {:name "author" :content "Spencer"}]
    [:meta {:name "viewport" :content "width=device-width, initial-scale=1"}]
    bootstrap-css
-   (hp/include-css "/blog/css/my-css.css")
+   (hp/include-css "/css/my-css.css")
    favicons])
 
 (def page-footer
