@@ -1,7 +1,6 @@
-(ns html-generator
+(ns html-page-utils
   (:require [hiccup.page :as hp]
-            [parsers-converters :as pc])
-  (:import (java.io File)))
+            [parsers-converters :as pc]))
 
 (def bootstrap-css
   [:link {:href "https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css"
@@ -15,12 +14,12 @@
             :crossorigin "anonymous"}])
 
 (def favicons
-  [:div
+  (list
    [:link {:rel "apple-touch-icon" :href "resources/favicons/apple-touch-icon.png" :sizes "180x180"}]
    [:link {:rel "icon" :href "resources/favicons/favicon-32x32.png" :sizes "32x32" :type "image/png"}]
    [:link {:rel "icon" :href "resources/favicons/favicon-16x16.png" :sizes "16x16" :type "image/png"}]
    [:link {:rel "manifest" :href "resources/favicons/site.webmanifest.json"}]
-   [:link {:rel "icon" :href "resources/favicons/favicon.ico"}]])
+   [:link {:rel "icon" :href "resources/favicons/favicon.ico"}]))
 
 (def html-header
   [:head
@@ -30,34 +29,8 @@
    [:meta {:name "author" :content "Spencer"}]
    [:meta {:name "viewport" :content "width=device-width, initial-scale=1"}]
    bootstrap-css
-   (first (hp/include-css "css/my-css.css"))
+   (hp/include-css "/blog/css/my-css.css")
    favicons])
-
-(def posts-directory "resources/markdown-posts")
-
-(defn get-blogpost-filenames [dir]
-  (->> dir
-       clojure.java.io/file
-       file-seq
-       (filter #(.isFile %))
-       (map str)))
-
-(def blogpost-maps-vector
-  (->> posts-directory
-       get-blogpost-filenames
-       (mapv pc/md-file->blogpost-map)))
-
-(defn make-post-area [posts]
-  (->> posts
-       (sort-by :publish-date)
-       reverse
-       (map pc/blogpost->hiccup)
-       (apply conj [:div.main-post-area])))
-
-(defn make-toc [posts]
-  [:div.toc
-   [:h4 "Table of Contents"]
-   (pc/make-toc-hiccup posts)])
 
 (def page-footer
   [:div.footer
@@ -65,33 +38,24 @@
     [:a {:href "https://github.com/spencerminer/blog/"}
      "github.com/spencerminer/blog/"]]])
 
-(defn make-html-body [posts]
+(defn make-toc [posts]
+  [:div.toc
+   [:h4 "Table of Contents"]
+   (pc/make-toc-hiccup posts)])
+
+(defn make-html-body [all-posts main-content]
   [:body
    [:div.container
     [:div.row [:h1 "Here we go..."]]
     [:br]
     [:div.row
-     [:div.col-9 (make-post-area posts)]
-     [:div.col-3 (make-toc posts)]]
+     [:div.col-9 main-content]
+     [:div.col-3 (make-toc all-posts)]]
     [:br]
     [:br]
     [:br]
     [:div.row page-footer]]
    bootstrap-bundle])
 
-(defn make-folder! [path]
-  (.mkdir (File. ^String path)))
-
-(defn generate-post-html! [post]
-  (make-folder! (str "posts/" (:publish-date post)))
-  (->> post
-       pc/blogpost->hiccup
-       (hp/html5 {:lang "en"} html-header)
-       (spit (pc/make-post-url post))))
-
-(defn generate-index-html! []
-  (doall (map generate-post-html! blogpost-maps-vector))
-  (->> blogpost-maps-vector
-       make-html-body
-       (hp/html5 {:lang "en"} html-header)
-       (spit "index.html")))
+(defn make-html-page [body]
+  (hp/html5 {:lang "en"} html-header body))

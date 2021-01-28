@@ -56,10 +56,10 @@
               string/trim
               string/lower-case
               (string/replace #" " "-")
-              (string/replace #"\D" ""))))
+              (string/replace #"[^\w]" ""))))
 
 (defn make-link-to-post [post]
-  [:a {:href (make-post-url post)}
+  [:a {:href (str "/blog/" (make-post-url post))}
    (:title post)])
 
 (defn make-toc-hiccup [posts]
