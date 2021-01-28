@@ -4,12 +4,16 @@ body {
 }
 
 h1 {
-    color: #027cd9;
+    color: #21a561;
     padding: 25px;
 }
 
 p {
     color: #2b2b2b;
+}
+
+.container {
+    max-width: 900px;
 }
 
 .post-body {

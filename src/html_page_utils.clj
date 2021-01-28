@@ -49,8 +49,8 @@
    [:div.container
     [:div.row [:h1 [:a {:href (str r/path-prefix "/")} "Here we go..."]]]
     [:div.row
-     [:div.col-9 main-content]
-     [:div.col-3 (make-toc all-posts)]]
+     [:div.col-md-9 main-content]
+     [:div.col-sm.order-first.order-md-last (make-toc all-posts)]]
     [:br]
     [:br]
     [:br]
