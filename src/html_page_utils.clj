@@ -42,7 +42,10 @@
 (defn make-toc [posts]
   [:div.toc
    [:h4 "Table of Contents"]
-   (pc/make-toc-hiccup posts)])
+   (->> posts
+        (sort-by :publish-date)
+        reverse
+        (pc/make-toc-hiccup))])
 
 (defn make-html-body [all-posts main-content]
   [:body

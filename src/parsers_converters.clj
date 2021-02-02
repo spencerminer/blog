@@ -36,6 +36,17 @@
                      clojure.string/trim)
                header-strings)))
 
+(defn spaced-string-to-set [s]
+  (-> s
+      (clojure.string/split #" ")
+      set))
+
+(defn update-blogpost-header [header-map]
+  (merge {:author "Spencer Miner"}
+         (update header-map
+                 :tags
+                 spaced-string-to-set)))
+
 (defn md-file->blogpost-map [filename]
   (let [[hdr & body]
         (->> filename
@@ -44,7 +55,9 @@
              (partition-by empty?)
              (remove #(empty? (first %))))]
     (merge
-     (parse-my-md-header hdr)
+     (-> hdr
+         parse-my-md-header
+         update-blogpost-header)
      {:hiccup-body (->> body
                         (map parse-md-section)
                         (apply conj [:div.post-body]))})))
@@ -64,6 +77,22 @@
    (:title post)])
 
 (defn make-toc-hiccup [posts]
-  [:div.post-titles
-   (he/unordered-list
-    (map make-link-to-post posts))])
+  [:div.toc
+   [:div.post-titles
+    (he/unordered-list
+     (map make-link-to-post posts))]
+   [:div.post-tags
+    [:h5 "Tags"]
+    (->> posts
+         (map :tags)
+         (apply clojure.set/union)
+         (apply list)
+         he/unordered-list)]])
+
+(comment
+ (let [posts site-generator/blogpost-maps]
+   (->> posts
+        (map :tags)
+        (apply clojure.set/union)
+        (apply list)
+        he/unordered-list)))
