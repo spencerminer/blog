@@ -12,11 +12,6 @@
        (filter #(.isFile %))
        (map str)))
 
-(def blogpost-maps
-  (->> posts-directory
-       get-blogpost-filenames
-       (mapv pc/md-file->blogpost-map)))
-
 (defn make-all-posts-hiccup [posts]
   (->> posts
        (sort-by :publish-date)
@@ -27,16 +22,18 @@
 (defn make-folder! [path]
   (.mkdir (File. ^String path)))
 
-(defn generate-post-pages! [post]
+(defn generate-post-pages! [blogposts post]
   (make-folder! (str "posts/" (:publish-date post)))
   (->> post
        pc/blogpost->hiccup
-       (h/make-html-body blogpost-maps)
+       (h/make-html-body blogposts)
        h/make-html-page
        (spit (pc/make-post-url post))))
 
 (defn generate-all-post-pages! [blogposts]
-  (doall (map generate-post-pages! blogposts)))
+  (doall
+   (map (partial generate-post-pages! blogposts)
+        blogposts)))
 
 (defn generate-toc-page! [blogposts]
   (->> blogposts
@@ -44,11 +41,19 @@
        h/make-html-page
        (spit "posts/index.html")))
 
+(defn generate-index! [blogposts]
+  (->> blogposts
+       make-all-posts-hiccup
+       (h/make-html-body blogposts)
+       h/make-html-page
+       (spit "index.html")))
+
+(def blogpost-maps
+  (->> posts-directory
+       get-blogpost-filenames
+       (mapv pc/md-file->blogpost-map)))
+
 (defn generate-website-html! []
   (generate-all-post-pages! blogpost-maps)
   (generate-toc-page! blogpost-maps)
-  (->> blogpost-maps
-       make-all-posts-hiccup
-       (h/make-html-body blogpost-maps)
-       h/make-html-page
-       (spit "index.html")))
+  (generate-index! blogpost-maps))

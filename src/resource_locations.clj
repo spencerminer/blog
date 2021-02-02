@@ -2,6 +2,9 @@
 
 (def local-test? (System/getenv "BLOG_LOCAL_ENV"))
 
+;; On a GitHub-hosted website `/` is the root folder, but when developing
+;; locally `/blog/` is the root folder, so I need to change all the absolute
+;; paths depending on what environment I'm in. Ugh
 (def path-prefix (when local-test? "/blog"))
 
 (def css-location (str path-prefix "/css/my-css.css"))

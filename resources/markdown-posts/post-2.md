@@ -1,4 +1,4 @@
-## Post #2
+## My Plan For This Blog Right Now
 ##### 2021-01-24
 ###### meta technical
 
