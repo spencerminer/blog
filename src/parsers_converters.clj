@@ -1,5 +1,6 @@
 (ns parsers-converters
-  (:require [clojure.string :as string]
+  (:require [clojure.set :as set]
+            [clojure.string :as string]
             [hiccup.element :as he]
             [resource-locations :as r]))
 
@@ -85,7 +86,7 @@
     [:h5 "Tags"]
     (->> posts
          (map :tags)
-         (apply clojure.set/union)
+         (apply set/union)
          (apply list)
          he/unordered-list)]])
 
@@ -93,6 +94,6 @@
  (let [posts site-generator/blogpost-maps]
    (->> posts
         (map :tags)
-        (apply clojure.set/union)
+        (apply set/union)
         (apply list)
         he/unordered-list)))
