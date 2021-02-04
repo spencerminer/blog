@@ -20,8 +20,3 @@ Luckily I was able to find [PlayOnMac](https://www.playonmac.com/en/), which
 apparently has been adapted to be able to handle 64-bit apps, so I was able 
 to install that, install Windows Steam via that, and then download and run 
 Roller Coast Tycoon 2 from Steam. Great! 
-
-Saved games are stored in
-/Users/MYNAME/Library/Application\ Support/com.yourcompany.
-yourapp_149972247128911/drive_c/users/spencerminer/My\ 
-Documents/steamapps/common/RollerCoaster\ Tycoon\ Deluxe  
