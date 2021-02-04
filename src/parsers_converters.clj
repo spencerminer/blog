@@ -10,21 +10,37 @@
    [:h5 (:publish-date blogpost-map)]
    (:hiccup-body blogpost-map)])
 
+(defn heading-to-hiccup [s]
+  (let [[hashes & content] (clojure.string/split s #" ")]
+    [(keyword (str "h" (count hashes)))
+     (string/join " " content)]))
+
+(defn combine-overflow-lines [lines]
+  (reduce (fn [acc x]
+            (let [trimmed (string/trim x)]
+              (if (= \+ (first trimmed))
+                (conj acc x)
+                (conj (vec (drop-last acc))
+                      (str (last acc) trimmed)))))
+          [] lines))
+
+(defn parse-indenting-list-element [line]
+  (let [[spaces & content] (clojure.string/split line #"\+ ")]
+    [(keyword (str "li.list-level-" (int (/ (count spaces) 4))))
+     content]))
+
+(defn indenting-unordered-list [lines]
+  [:ul (->> lines
+            combine-overflow-lines
+            (map parse-indenting-list-element))])
+
 (defn parse-md-section [lines]
-  (let [[md-key & content]
-        (clojure.string/split (first lines) #" ")]
-    (case (first md-key)
-      \# [(keyword (str "h" (count md-key)))
-          (clojure.string/join " " content)]
-      \+ (he/unordered-list
-          (map #(->> % (drop 2) (apply str))
-               lines))
-      \* (he/unordered-list
-          (map #(->> % (drop 2) (apply str))
-               lines))
-      \1 (he/ordered-list
-          (map #(->> % (drop 3) (apply str))
-               lines))
+  (let [section-type (first (first lines))]
+    (case section-type
+      \# (map heading-to-hiccup lines)
+      \+ (indenting-unordered-list lines)
+      ;; Do I bother doing one for *?
+      ;;\1 (indenting-ordered-list lines)
       (apply conj [:p] lines))))
 
 (defn is-#-char [c] (= \# c))

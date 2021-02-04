@@ -12,6 +12,22 @@ p {
     color: #2b2b2b;
 }
 
+.list-level-1 {
+    margin-left: 2em;
+}
+
+.list-level-2 {
+    margin-left: 4em;
+}
+
+.list-level-3 {
+    margin-left: 6em;
+}
+
+.list-level-4 {
+    margin-left: 8em;
+}
+
 .container {
     max-width: 900px;
 }

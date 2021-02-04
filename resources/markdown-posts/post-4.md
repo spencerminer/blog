@@ -28,7 +28,7 @@ a minute or two. Very exciting.
 + Put tags in ToC
 + Put vertical spacing in main post area of home page
 + Improve Markdown parser/Hiccup converter
-  + Understand indented sub-bullets
-  + Make links work correctly
-  + Use mono font for `code` and ```code blocks```
+    + Understand indented sub-bullets
+    + Make links work correctly
+    + Use mono font for `code` and ```code blocks```
 + Dark mode (button or permanent?)

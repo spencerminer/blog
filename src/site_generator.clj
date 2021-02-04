@@ -54,6 +54,7 @@
        (mapv pc/md-file->blogpost-map)))
 
 (defn generate-website-html! []
-  (generate-all-post-pages! blogpost-maps)
-  (generate-toc-page! blogpost-maps)
-  (generate-index! blogpost-maps))
+  (vector
+   (generate-all-post-pages! blogpost-maps)
+   (generate-toc-page! blogpost-maps)
+   (generate-index! blogpost-maps)))
