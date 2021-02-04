@@ -51,3 +51,15 @@ of a small emergency software outage.
       you need to check it with a separate call
 + Want things to fail loudly and fast
 + Resiliency - if it failed it should be able to try again safely, and do that
+
+#### Todo list
+
++ ~~Turn tags into a set~~
++ ~~Put tags in ToC~~
++ Make ToC tags links
++ Put vertical spacing in main post area of home page
++ Improve Markdown parser/Hiccup converter
+    + ~~Understand indented sub-bullets~~
+    + Make links in text work correctly
+    + Use mono font for `code` and ```code blocks```
++ Dark mode (button or permanent?)

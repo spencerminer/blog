@@ -20,15 +20,4 @@ commits code changes that happen during an Action.
 
 Putting all those things together, I now have a workflow where I can write a 
 post in Markdown and push it to GitHub and it'll be live on the site within 
-a minute or two. Very exciting. 
-
-#### Todo list
-
-+ Turn tags into a set
-+ Put tags in ToC
-+ Put vertical spacing in main post area of home page
-+ Improve Markdown parser/Hiccup converter
-    + Understand indented sub-bullets
-    + Make links work correctly
-    + Use mono font for `code` and ```code blocks```
-+ Dark mode (button or permanent?)
+a minute or two. Very exciting.
